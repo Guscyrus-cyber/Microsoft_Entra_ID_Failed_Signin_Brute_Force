@@ -25,15 +25,15 @@ The sign-in log is displaying correctly. The existing activity provides the base
 
 ### An important existing event is already visible:
 SOC Test User → My Profile → Failure → Error 50126\
-That is an older single failed-password event from the previous lab I did. It should not be confused with the new events that will be generated for this lab. (second image)\
+That is an older single failed-password event from the previous lab I did. It should not be confused with the new events that will be generated for this lab. 
 
 Step 2 — Generate Repeated Failed Sign-Ins
 
 The next objective is to create several controlled failed authentication attempts against the SOC Test User. This will simulate the pattern that a Tier 1 SOC analyst might encounter during brute-force triage.\
-I Open a Private/Incognito browser window separately. (Image 3)\
+I Open a Private/Incognito browser window separately. 
 I Generate the First Failed Sign-In.\
 [Microsoft My Account](https://myaccount.microsoft.com/?utm_source=chatgpt.com)\
-I enter my **SOC Test User** account. (Image 4)\
+I enter my **SOC Test User** account. 
 
 Step 3 — Controlled Failed Authentication
 
@@ -44,7 +44,7 @@ I Submit it **once only**.\
 Failed Sign-In Generated\
 The Microsoft authentication interface returned:\
 “Your account or password is incorrect".
-This establishes the user-side evidence that authentication failed because invalid credentials were submitted. (Image 5)\
+This establishes the user-side evidence that authentication failed because invalid credentials were submitted. 
 
 Step 4 — Investigate the Event in Microsoft Entra ID
 
@@ -54,7 +54,7 @@ Entra ID → Users → Sign-in logs
 Looking for a new entry for:\
 **User:** SOC Test User\
 **Status:** Failure\
-Now, The new controlled event is now visible at the top: (Images 6 and 7)
+Now, The new controlled event is now visible at the top: 
 
 **8/23/2026, 9:46:11 PM — SOC Test User — My Profile — Failure — Error 50126**
 
@@ -75,7 +75,7 @@ The Basic info confirms the controlled authentication failure:
 **Failure reason:** Error validating credentials due to invalid username or password.\
 **Authentication requirement:** Single-factor authentication\
 **Time:** August 23, 2026 at 9:46:11 PM\
-**Error 50126** indicates that Microsoft Entra ID received the authentication request, but the supplied credentials were invalid. At this point, a single occurrence is consistent with an incorrect-password attempt and does not by itself establish brute-force activity**.** (Image 8)
+**Error 50126** indicates that Microsoft Entra ID received the authentication request, but the supplied credentials were invalid. At this point, a single occurrence is consistent with an incorrect-password attempt and does not by itself establish brute-force activity.
 
 Step — 6: Source Investigation
 
@@ -86,7 +86,7 @@ Location:** Lorton, Virginia, US\
 **Autonomous System Number (ASN):** 701\
 **Global Secure Access:** No\
 **Named location:** None configured\
-The failed sign-in originated from **IP address 108.28.79.19**, geolocated by Microsoft Entra ID to **Lorton, Virginia, US**. (Image 9)
+The failed sign-in originated from **IP address 108.28.79.19**, geolocated by Microsoft Entra ID to **Lorton, Virginia, US**. 
 
 This information become important when correlating multiple authentication failures. Repeated failures from the same IP against one account can indicate password guessing, while one IP attempting authentication against many accounts can indicate password spraying.
 
@@ -104,7 +104,7 @@ The Device info confirms the client environment associated with the failed authe
 **Join type:** Not reported
 
 The failed authentication originated from a **Chrome browser on macOS**. Entra ID reports the endpoint as unmanaged and non-compliant with no registered Device ID or join type.
-This does not automatically make the event malicious. However, device state becomes useful during triage because an authentication attempt from an unknown or unmanaged endpoint may require additional investigation when combined with other indicators such as repeated failures, unusual IP addresses, impossible travel, or successful authentication after multiple failures. (Image 10)
+This does not automatically make the event malicious. However, device state becomes useful during triage because an authentication attempt from an unknown or unmanaged endpoint may require additional investigation when combined with other indicators such as repeated failures, unusual IP addresses, impossible travel, or successful authentication after multiple failures. 
 
 Step 8 — Authentication Investigation
 
@@ -120,7 +120,7 @@ The **Authentication Details** tab was reviewed to determine which authenticatio
 The authentication attempt failed during password validation. Microsoft Entra ID rejected the credentials because the supplied username/password combination was invalid.
 
 This is important during SOC triage because repeated authentication failures—particularly from the same IP address or against the same account—can indicate password guessing, brute-force activity, or credential-based attacks rather than an isolated user mistake.
-Finding: Password authentication attempted → Authentication failed → Invalid credentials (image 11)
+Finding: Password authentication attempted → Authentication failed → Invalid credentials
 
 Triage Scope and Transition to Brute-Force Investigation
 
@@ -139,7 +139,7 @@ The investigation will focus on the number and timing of failures, username, sou
 I Generate the controlled failed sign-in attempts.Using **SOC Test User** (testuser01@...onmicrosoft.com).\
 Five controlled authentication attempts were performed against the **SOC Test User** account using incorrect passwords within a short period. Each attempt was rejected by Microsoft authentication with an incorrect account/password message.\
 The repeated failures were intentionally generated to simulate the authentication pattern that may occur during a **password-guessing or brute-force attack**. The next stage of the investigation is to determine how these attempts appear from the SOC analyst's perspective in Microsoft Entra ID.\
-Brute-Force Simulation Completed. (Images 12, 13, 14, 15, and 16)\
+Brute-Force Simulation Completed. 
 
 Step 10 — Review Repeated Failed Sign-Ins\
 After the controlled authentication attempts were completed, the administrator session was used to return to **Microsoft Entra ID → Users → Sign-in logs** and I refresh the authentication records.\
@@ -152,7 +152,7 @@ The sign-in logs now show **five consecutive failed authentication attempts** ag
 **11:13:42 PM** — Failure — Error **50126**
 
 All five events target the same **SOC Test User**, use the **My Profile** application, and return **error code 50126**, representing invalid username or password credentials.\
-This is significantly more interesting to a SOC analyst than a single isolated failed login because the events form a repeated authentication-failure pattern within approximately two minutes. In a production environment, this pattern could indicate password guessing or attempted brute-force activity and would justify further investigation. (Image 17)
+This is significantly more interesting to a SOC analyst than a single isolated failed login because the events form a repeated authentication-failure pattern within approximately two minutes. In a production environment, this pattern could indicate password guessing or attempted brute-force activity and would justify further investigation. 
 
 
 Step 11 — Correlation of the Brute-Force Attempts
@@ -167,7 +167,7 @@ I Open the event and review:
 
 Confirm **Status = Failure**\
 Confirm **Sign-in error code = 50126**\
-Confirm **User = SOC Test User** (Image 18)
+Confirm **User = SOC Test User** 
 
 Then I open **Location**.
 The key information needed at this point is:\
@@ -182,7 +182,7 @@ This confirms the first event in the sequence:
 **Authentication:** Single-factor authentication\
 **Source IP:** 108.28.79.19\
 **Location:** Lorton, Virginia, US\
-**Time:** 8/23/2026, 11:13:42 PM (Image 19)
+**Time:** 8/23/2026, 11:13:42 PM 
 
 This event matches the authentication failure pattern observed during the simulated brute-force activity.
 A single 50126 event normally represents an incorrect credential attempt and, by itself, does not establish brute-force activity. However, the sign-in log previously showed five authentication failures against the same SOC Test User within approximately two minutes. The repeated failures within a short period create the important indicator. Correlation of the events by user account, timestamps, error code, source IP, and location allows the activity to be classified as a simulated brute-force pattern rather than an isolated password mistake.
@@ -191,7 +191,7 @@ Step 12 — Verify the Common Source
 
 I Return to the sign-in log, and I open one of the other four recent failed events**.** I Select Location and compare its IP address with: 108.28.79.19\
 If the second event also shows 108.28.79.19, that will provide direct evidence that multiple authentication attempts originated from the same source IP**.\**
-Yes, this confirms that another failed authentication event shows the same source IP address: 108.28.79.19 and the same location, Lorton, Virginia, US**.** (Image 20)**\
+Yes, this confirms that another failed authentication event shows the same source IP address: 108.28.79.19 and the same location, Lorton, Virginia, US.
 
 Step 13 — Source IP Correlation
 
@@ -214,11 +214,11 @@ The Device info confirms the authentication attempt originated from:
 **Join Type:** None recorded
 
 The event originated from an unmanaged and non-compliant macOS endpoint. No Device ID or Entra join type is associated with the authentication attempt.
-When correlated with the previous findings, multiple **50126** authentication failures against the same account from the same source IP within a short period, the device information provides another useful contextual indicator for the investigation. (Image 21)\
+When correlated with the previous findings, multiple **50126** authentication failures against the same account from the same source IP within a short period, the device information provides another useful contextual indicator for the investigation. 
 
 Step 15 — Authentication Correlation
 
-I Select Authentication Details for this same event. The next check is whether the attempt again shows Password**,** Password in the cloud, Succeeded: false, and invalid username or password.
+I Select Authentication Details for this same event. The next check is whether the attempt again shows Password in the cloud, Succeeded: false, and invalid username or password.
 
 The Authentication Details confirm:
 
@@ -236,7 +236,7 @@ I Select Conditional Access. This determines whether any Conditional Access poli
 
 The Conditional Access tab shows: Policy Name: Not applicable\
 No Conditional Access policy was applied to this failed authentication event. The authentication failure occurred because the submitted credentials were invalid, rather than because access was blocked by a Conditional Access policy.\
-At this point, the investigation has established the important evidence: repeated failures, error code **50126**, same account, same source IP/location, device context, failed password authentication, and Conditional Access status. (image 23)
+At this point, the investigation has established the important evidence: repeated failures, error code **50126**, same account, same source IP/location, device context, failed password authentication, and Conditional Access status.
 
 
 Step 17 — SOC Analyst Investigation Conclusion
